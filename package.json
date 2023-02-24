@@ -1,0 +1,45 @@
+{
+  "name": "steam-games-monitor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "lint:staged": "lint-staged",
+    "lint:check": "eslint . --ignore-path .gitignore --ext .js",
+    "husky:prepare": "husky install",
+    "env:init": "cp app.env.example app.env",
+    "env:set": "set -a; source app.env; set +a"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/code-planet-eu/steam-games-monitor.git"
+  },
+  "author": "Jakub Supa <git.io/jakub>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/code-planet-eu/steam-games-monitor/issues"
+  },
+  "homepage": "https://github.com/code-planet-eu/steam-games-monitor#readme",
+  "dependencies": {
+    "@ptkdev/logger": "^1.8.0",
+    "request": "^2.88.2"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix"
+  },
+  "devDependencies": {
+    "eslint": "^8.34.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.1.2",
+    "nodemon": "^2.0.20",
+    "prettier": "^2.8.4",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-jsonc": "^2.6.0",
+    "eslint-plugin-prefer-arrow-functions": "^3.1.4",
+    "eslint-plugin-prettier": "^4.2.1"
+  }
+}
