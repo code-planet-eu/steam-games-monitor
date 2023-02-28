@@ -1,8 +1,5 @@
 const config = {}
 
-config.notionAuth = process.env.NOTION_AUTH || 'secret_123'
-config.notionDatabaseId = process.env.NOTION_DATABASE_ID || '123'
-
-config.steamApiKey = process.env.STEAM_API_KEY || '123'
+config.mongo_uri = process.env.MONGO_URI || 'mongodb://localhost:1339/steam-games-monitor'
 
 module.exports = config

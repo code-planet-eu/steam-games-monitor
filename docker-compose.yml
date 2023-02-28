@@ -1,0 +1,13 @@
+version: '3'
+services:
+  db:
+    image: mongo:latest
+    container_name: steam-games-monitor-db
+    restart: always
+    volumes:
+      - ./data/db:/data/db
+    ports:
+      - 1339:27017
+
+volumes:
+  db_data:
