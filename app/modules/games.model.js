@@ -21,7 +21,7 @@ const gamesSchema = new Schema(
         discount: { type: String, required: true }
       }
     ],
-    last_check: { type: Date, required: true, default: Date.now }
+    last_check: { type: Date, required: true }
   },
   {
     timestamps: true
