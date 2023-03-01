@@ -1,6 +1,6 @@
 {
   "name": "steam-games-monitor",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -27,6 +27,8 @@
     "cheerio": "^1.0.0-rc.12",
     "discord.js": "^14.7.1",
     "log-to-file": "^3.0.3",
+    "mongoose": "^7.0.0",
+    "node-fetch": "^2.6.9",
     "request": "^2.88.2"
   },
   "lint-staged": {
