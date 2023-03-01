@@ -57,10 +57,10 @@ _discord.client.on(discord.Events.InteractionCreate, async interaction => {
   // const steamId = options.getNumber('steamid')
   const afterOneHour = new Date().setHours(new Date().getHours() - 1)
 
-  const games = await Games.find({ last_check: { $lte: afterOneHour } }).sort({ last_check: 1 })
+  const games = await Games.find({ last_check: { $gte: afterOneHour } }).sort({ last_check: 1 })
   const packageIds = games.map(game => game.packages.map(p => p.packageid)).join(',')
   const count = games.length
-  const oldestTimeCheck = games[0].last_check
+  const oldestTimeCheck = games[0]?.last_check
 
   if (commandName === 'currentgames') {
     const message = `There are ${count} games to check. The oldest game was checked at ${oldestTimeCheck}\n\nhttps://store.steampowered.com/api/addtocart/?packageids=${packageIds}`
