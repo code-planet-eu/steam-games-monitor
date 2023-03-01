@@ -9,6 +9,18 @@ _discord.webhookClient = new discord.WebhookClient({
     token: config.discord.webhook_token
 });
 
+_discord.client = new discord.Client({
+    intents: [discord.GatewayIntentBits.Guilds, discord.GatewayIntentBits.GuildMessages, discord.GatewayIntentBits.MessageContent]
+});
+
+_discord.init = async () => {
+_discord.client.login(config.discord.token);
+
+    _discord.client.on("ready", () => {
+        console.log(`Logged in as ${_discord.client.user.tag}!`)
+      })
+}
+
 _discord.embedNewGame = async game => {
     const pakcageIds = game.packages.map(p => p.packageid).join(', ')
     const embed = new discord.EmbedBuilder()
