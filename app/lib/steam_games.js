@@ -2,6 +2,7 @@ const event = require('events')
 const fetch = require('node-fetch')
 const cheerio = require('cheerio')
 const { log } = require('./logger')
+const Games = require('../modules/games.model')
 
 const sg = new event.EventEmitter()
 
@@ -25,6 +26,50 @@ sg.getStoreSearchResults = async (query, page) => {
 
   sg.emit('StoreSearchResults', { results, count, next_page, page })
   return { results, count, next_page, page }
+}
+
+sg.getGameDetails = async appid => {
+  const result = {
+    package: []
+  }
+  try {
+    const url = `https://store.steampowered.com/api/appdetails?appids=${appid}&cc=ar`
+    const request = await fetch(url)
+    const data = await request.json().then(data => data[appid].data)
+
+    data.package_groups.forEach(group => {
+      group.subs.forEach(sub => {
+        if (sub.price_in_cents_with_discount <= 500)
+          result.packages.push({
+            packageid: sub.packageid,
+            price: sub.price_in_cents_with_discount,
+            discount: sub.percent_savings_text
+          })
+      })
+    })
+
+    result.name = data.name
+    result.appid = appid
+    result.header_image = data.header_image
+    result.type = data.type
+    result.card_drop = !!data.categories.find(cat => cat.id === 29)
+    result.prices = {
+      initial: data.price_overview.initial_formatted,
+      final: data.price_overview.final_formatted,
+      discount: data.price_overview.discount_percent
+    }
+
+    const inDB = await Games.findOne({ appid: result.appid })
+
+    if (inDB) inDB.updateOne({ last_check: Date.now() })
+    else {
+      const record = new Games(result)
+      await record.save()
+      sg.emit('newGame', result)
+    }
+  } catch (err) {
+    log(err, 'error', 'steam_games.log')
+  }
 }
 
 module.exports = sg

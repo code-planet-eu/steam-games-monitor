@@ -9,7 +9,8 @@ const workers = {}
 workers.init = async () => {
   log('Starting workers...')
   workers.deleteOldRecords()
-  workers.refreshGames()
+  workers.refreshGames(10)
+  workers.processQueue()
 }
 
 workers.refreshGames = async interval => {
@@ -25,6 +26,22 @@ workers.refreshGames = async interval => {
   } else {
     await fetchData()
   }
+}
+
+workers.processQueue = async () => {
+  const nextItem = async () => {
+    const item = await Queue.findOne({ state: 'pending' }).sort({ createdAt: 1 })
+
+    if (item) {
+      await item.updateOne({ state: 'processing' })
+
+      await sg.getGameDetails(item.appid)
+
+      await item.updateOne({ state: 'done' })
+    }
+  }
+
+  setInterval(nextItem, 1000 * 2)
 }
 
 workers.deleteOldRecords = async () => {
@@ -48,5 +65,9 @@ sg.on('StoreSearchResults', async ({ results, count, page }) => {
     queue.save()
   })
 })
+
+// sg.on('GameDetails', async ({ appid, name, header_image, type, card_drop, prices, packages }) => {
+//   log(`Got details for ${name} (${appid})`, 'info', 'workers.log')
+// })
 
 module.exports = workers
