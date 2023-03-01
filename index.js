@@ -3,6 +3,7 @@ const mongoose = require('mongoose')
 const workers = require('./app/lib/workers')
 const config = require('./config/settings/config')
 const { log } = require('./app/lib/logger')
+const _discord = require('./app/lib/discord')
 
 const app = {}
 
@@ -18,7 +19,7 @@ app.init = async () => {
   }
 
   log('App started')
-
+  await _discord.init()
   await workers.init()
 }
 

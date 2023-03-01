@@ -61,8 +61,9 @@ sg.getGameDetails = async appid => {
 
     const inDB = await Games.findOne({ appid: result.appid })
 
-    if (inDB) await inDB.updateOne({ last_check: Date.now() })
-    else {
+    await inDB.updateOne({ last_check: Date.now() })
+
+    if (!inDB) {
       const record = new Games(result)
       await record.save()
       sg.emit('newGame', result)

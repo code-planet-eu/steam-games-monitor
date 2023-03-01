@@ -6,7 +6,8 @@ config.query = process.env.QUERY || 'xxxxxxxx'
 
 config.discord = {
   webhook_id: process.env.DISCORD_WEBHOOK_ID || 'xxxxx',
-  webhook_token: process.env.DISCORD_WEBHOOK_TOKEN || 'xxxxxxxxxxxxxx'
+  webhook_token: process.env.DISCORD_WEBHOOK_TOKEN || 'xxxxxxxxxxxxxx',
+  token: process.env.DISCORD_TOKEN || 'xxxxxxxxxxxx'
 }
 
 module.exports = config
