@@ -4,6 +4,7 @@ const config = require('../../config/settings/config')
 
 const Queue = require('../modules/queue.model')
 const _discord = require('./discord')
+const Games = require('../modules/games.model')
 
 const workers = {}
 
@@ -51,9 +52,12 @@ workers.deleteOldRecords = async () => {
 
   const deleteItems = async () => {
     const count = await Queue.countDocuments(query)
+    const countOfGames = await Games.countDocuments({ last_check: { $lt: oneDayAgo } })
     await Queue.deleteMany(query)
+    await Games.deleteMany({ last_check: { $lt: oneDayAgo } })
 
     log(`Deleted ${count} items`, 'info', 'workers.log')
+    log(`Deleted ${countOfGames} games`, 'info', 'workers.log')
   }
 
   setInterval(deleteItems, 1000 * 60 * 60 * 24)
