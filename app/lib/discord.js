@@ -63,7 +63,7 @@ _discord.client.on(discord.Events.InteractionCreate, async interaction => {
   const oldestTimeCheck = games[0]?.last_check
 
   if (commandName === 'currentgames') {
-    const message = `There are *${count}* games to check. The oldest game was checked at \`${oldestTimeCheck}\`\n\nhttps://store.steampowered.com/api/addtocart/?packageids=${packageIds}`
+    const message = `There are **${count}** games to check. The oldest game was checked at \`${oldestTimeCheck}\`\n\nhttps://store.steampowered.com/api/addtocart/?packageids=${packageIds}`
     const embed = new discord.EmbedBuilder().setDescription(packageIds).setColor(16734410)
 
     await interaction.reply({
