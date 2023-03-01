@@ -68,7 +68,8 @@ _discord.client.on(discord.Events.InteractionCreate, async interaction => {
 
     await interaction.reply({
       content: message,
-      embeds: [embed]
+      embeds: [embed],
+      ephemeral: true
     })
   }
 })
