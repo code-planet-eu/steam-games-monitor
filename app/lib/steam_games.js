@@ -30,7 +30,7 @@ sg.getStoreSearchResults = async (query, page) => {
 
 sg.getGameDetails = async appid => {
   const result = {
-    package: []
+    packages: []
   }
   try {
     const url = `https://store.steampowered.com/api/appdetails?appids=${appid}&cc=ar`
