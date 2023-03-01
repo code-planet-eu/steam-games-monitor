@@ -3,6 +3,7 @@ const sg = require('./steam_games')
 const config = require('../../config/settings/config')
 
 const Queue = require('../modules/queue.model')
+const _discord = require('./discord')
 
 const workers = {}
 
@@ -66,8 +67,13 @@ sg.on('StoreSearchResults', async ({ results, count, page }) => {
   })
 })
 
-// sg.on('GameDetails', async ({ appid, name, header_image, type, card_drop, prices, packages }) => {
-//   log(`Got details for ${name} (${appid})`, 'info', 'workers.log')
-// })
+sg.on('newGame', async ({ appid, name, header_image, type, card_drop, prices, packages }) => {
+  log(
+    `Got details for ${name} (${appid}) | ${prices.initial} - (${prices.discount}) => ${prices.final}`,
+    'info',
+    'workers.log'
+  )
+  _discord.embedNewGame({ appid, name, header_image, type, card_drop, prices, packages })
+})
 
 module.exports = workers
