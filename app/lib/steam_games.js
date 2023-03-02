@@ -14,7 +14,7 @@ sg.getStoreSearchResults = async (query, page) => {
     const request = await fetch(url)
     const $ = cheerio.load(await request.text())
 
-    $('.search_result_row ').each((i, el) => {
+    $('.search_result_row').each((i, el) => {
       const appid = $(el).attr('data-ds-appid')
       const price = $(el).find('.search_price_discount_combined').attr('data-price-final')
       if (price <= 500) results.push({ appid, price })
@@ -78,10 +78,11 @@ sg.getGameDetails = async appid => {
 
     const inDB = await Games.findOne({ appid: result.appid })
 
-    await inDB.updateOne({ last_check: Date.now() })
+    await inDB?.updateOne({ last_check: Date.now() })
 
     if (!inDB) {
       const record = new Games(result)
+      record.last_check = Date.now()
       await record.save()
       sg.emit('newGame', result)
     }

@@ -60,7 +60,7 @@ workers.deleteOldRecords = async () => {
     log(`Deleted ${countOfGames} games`, 'info', 'workers.log')
   }
 
-  setInterval(deleteItems, 1000 * 60 * 60 * 24)
+  setInterval(deleteItems, 1000 * 60 * 60 * 1)
 }
 
 sg.on('StoreSearchResults', async ({ results, count, page }) => {
