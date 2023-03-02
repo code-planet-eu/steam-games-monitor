@@ -81,11 +81,11 @@ _discord.client.on(discord.Events.InteractionCreate, async interaction => {
 
     const message = `There are **${gamesToCheck?.length || 0}** games for this user. The oldest game was checked at \`${
       gamesToCheck[0]?.last_check
-    }\`\n\nhttps://store.steampowered.com/api/addtocart/?packageids=${gamesToCheck
-      .map(game => game.packages.map(p => p.packageid))
-      .join(',')}`
+    }\`\n\nhttps://store.steampowered.com/api/addtocart/?packageids=${
+      gamesToCheck.map(game => game.packages.map(p => p.packageid)).join(',') || 'No games to check.'
+    }`
     const embed = new discord.EmbedBuilder()
-      .setDescription(gamesToCheck.map(game => game.packages.map(p => p.packageid)).join(','))
+      .setDescription(gamesToCheck.map(game => game.packages.map(p => p.packageid)).join(',') || 'No games to check.')
       .setColor(16734410)
 
     await interaction.reply({
