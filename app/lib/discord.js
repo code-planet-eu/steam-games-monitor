@@ -81,8 +81,9 @@ _discord.client.on(discord.Events.InteractionCreate, async interaction => {
 
     const message = `There are **${gamesToCheck?.length || 0}** games for this user. The oldest game was checked at \`${
       gamesToCheck[0]?.last_check
-    }\`\n\nhttps://store.steampowered.com/api/addtocart/?packageids=${
-      gamesToCheck.map(game => game.packages.map(p => p.packageid)).join(',') || 'No games to check.'
+    }\`\n\nhttps://store.steampowered.com/api/addtocart/?packageids=${gamesToCheck
+      .map(game => game.packages.map(p => p.packageid))
+      .join(',')}'
     }`
     const embed = new discord.EmbedBuilder()
       .setDescription(gamesToCheck.map(game => game.packages.map(p => p.packageid)).join(',') || 'No games to check.')
