@@ -79,7 +79,7 @@ _discord.client.on(discord.Events.InteractionCreate, async interaction => {
     const userGames = await sg.getUserGames(steamId)
     const gamesToCheck = games.filter(game => !userGames.includes(game.appid))
 
-    const message = `There are **${gamesToCheck.length}** games for this user. The oldest game was checked at \`${
+    const message = `There are **${gamesToCheck?.length || 0}** games for this user. The oldest game was checked at \`${
       gamesToCheck[0]?.last_check
     }\`\n\nhttps://store.steampowered.com/api/addtocart/?packageids=${gamesToCheck
       .map(game => game.packages.map(p => p.packageid))
