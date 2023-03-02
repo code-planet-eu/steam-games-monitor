@@ -10,4 +10,6 @@ config.discord = {
   token: process.env.DISCORD_TOKEN || 'xxxxxxxxxxxx'
 }
 
+config.steam_api_key = process.env.STEAM_API_KEY || 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+
 module.exports = config

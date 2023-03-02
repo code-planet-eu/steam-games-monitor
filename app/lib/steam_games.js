@@ -3,6 +3,7 @@ const fetch = require('node-fetch')
 const cheerio = require('cheerio')
 const { log } = require('./logger')
 const Games = require('../modules/games.model')
+const config = require('../../config/settings/config')
 
 const sg = new event.EventEmitter()
 
@@ -28,10 +29,26 @@ sg.getStoreSearchResults = async (query, page) => {
   return { results, count, next_page, page }
 }
 
+sg.getUserGames = async steamid => {
+  let games = []
+
+  try {
+    const url = `https://api.steampowered.com/IPlayerService/GetOwnedGames/v1?key=${config.steam_api_key}&steamid=${steamid}`
+    const request = await fetch(url)
+    const data = await request.json().then(data => data.response.games)
+    games = data.map(game => game.appid)
+  } catch (err) {
+    log(err, 'error', 'steam_games.log')
+  }
+
+  return games
+}
+
 sg.getGameDetails = async appid => {
   const result = {
     packages: []
   }
+
   try {
     const url = `https://store.steampowered.com/api/appdetails?appids=${appid}&cc=ar`
     const request = await fetch(url)

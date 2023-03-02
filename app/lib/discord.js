@@ -1,6 +1,7 @@
 const discord = require('discord.js')
 
 const config = require('../../config/settings/config')
+const sg = require('./steam_games')
 const Games = require('../modules/games.model')
 const { log } = require('./logger')
 
@@ -12,7 +13,7 @@ _discord.commands.push({
   data: new discord.SlashCommandBuilder()
     .setName('gamesforuser')
     .setDescription('Response games package ids of given user.')
-    .addNumberOption(option => option.setName('steamid').setDescription('SteamId of the user you want to check'))
+    .addStringOption(option => option.setName('steamid').setDescription('SteamId of the user you want to check'))
 })
 
 _discord.commands.push({
@@ -53,18 +54,39 @@ _discord.client.on(discord.Events.InteractionCreate, async interaction => {
     return
   }
 
-  const { commandName } = interaction
-  // const steamId = options.getNumber('steamid')
+  const { commandName, options } = interaction
+  const steamId = options.getString('steamid')
   const afterOneHour = new Date().setHours(new Date().getHours() - 1)
 
   const games = await Games.find({ last_check: { $gte: afterOneHour } }).sort({ last_check: 1 })
-  const packageIds = games.map(game => game.packages.map(p => p.packageid)).join(',')
+  const packageIds = games.map(game => game.packages.map(p => p.packageid))
   const count = games.length
   const oldestTimeCheck = games[0]?.last_check
 
   if (commandName === 'currentgames') {
-    const message = `There are **${count}** games to check. The oldest game was checked at \`${oldestTimeCheck}\`\n\nhttps://store.steampowered.com/api/addtocart/?packageids=${packageIds}`
-    const embed = new discord.EmbedBuilder().setDescription(packageIds).setColor(16734410)
+    const message = ` There are **${count}** games to check. The oldest game was checked at \`${oldestTimeCheck}\`\n\nhttps://store.steampowered.com/api/addtocart/?packageids=${packageIds.join(
+      ','
+    )}`
+    const embed = new discord.EmbedBuilder().setDescription(packageIds.join(',')).setColor(16734410)
+
+    await interaction.reply({
+      content: message,
+      embeds: [embed],
+      ephemeral: true
+    })
+  }
+  if (commandName === 'gamesforuser') {
+    const userGames = await sg.getUserGames(steamId)
+    const gamesToCheck = games.filter(game => !userGames.includes(game.appid))
+
+    const message = `There are **${gamesToCheck.length}** games for this user. The oldest game was checked at \`${
+      gamesToCheck[0]?.last_check
+    }\`\n\nhttps://store.steampowered.com/api/addtocart/?packageids=${gamesToCheck
+      .map(game => game.packages.map(p => p.packageid))
+      .join(',')}`
+    const embed = new discord.EmbedBuilder()
+      .setDescription(gamesToCheck.map(game => game.packages.map(p => p.packageid)).join(','))
+      .setColor(16734410)
 
     await interaction.reply({
       content: message,
