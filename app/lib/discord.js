@@ -83,8 +83,7 @@ _discord.client.on(discord.Events.InteractionCreate, async interaction => {
       gamesToCheck[0]?.last_check
     }\`\n\nhttps://store.steampowered.com/api/addtocart/?packageids=${gamesToCheck
       .map(game => game.packages.map(p => p.packageid))
-      .join(',')}'
-    }`
+      .join(',')}`
     const embed = new discord.EmbedBuilder()
       .setDescription(gamesToCheck.map(game => game.packages.map(p => p.packageid)).join(',') || 'No games to check.')
       .setColor(16734410)
