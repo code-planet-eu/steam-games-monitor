@@ -56,7 +56,7 @@ sg.getGameDetails = async appid => {
 
     data.package_groups.forEach(group => {
       group.subs.forEach(sub => {
-        if (sub.price_in_cents_with_discount <= 500)
+        if (sub.price_in_cents_with_discount <= 500 && sub.price_in_cents_with_discount > 0)
           result.packages.push({
             packageid: sub.packageid,
             price: sub.price_in_cents_with_discount,
