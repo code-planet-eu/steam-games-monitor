@@ -38,7 +38,7 @@ sg.getUserGames = async steamid => {
     const data = await request.json().then(data => data.response.games)
     games = data.map(game => game.appid)
   } catch (err) {
-    log(err, 'error', 'steam_games.log')
+    log(`${steamid} | ${err}`, 'error', 'steam_games.log')
   }
 
   return games
@@ -87,7 +87,7 @@ sg.getGameDetails = async appid => {
       sg.emit('newGame', result)
     }
   } catch (err) {
-    log(err, 'error', 'steam_games.log')
+    log(`${appid} | ${err}`, 'error', 'steam_games.log')
   }
 }
 
