@@ -56,9 +56,10 @@ _discord.client.on(discord.Events.InteractionCreate, async interaction => {
 
   const { commandName, options } = interaction
   const steamId = options.getString('steamid')
-  const afterOneHour = new Date().setHours(new Date().getHours() - 1)
+  // const afterOneHour = new Date().setHours(new Date().getHours() - 1)
+  const after15Minutes = new Date().setMinutes(new Date().getMinutes() - 15)
 
-  const games = await Games.find({ last_check: { $gte: afterOneHour } }).sort({ last_check: 1 })
+  const games = await Games.find({ last_check: { $gte: after15Minutes } }).sort({ last_check: 1 })
   const packageIds = games.map(game => game.packages.map(p => p.packageid))
   const count = games.length
   const oldestTimeCheck = games[0]?.last_check
