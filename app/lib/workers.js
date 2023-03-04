@@ -47,10 +47,9 @@ workers.processQueue = async () => {
 }
 
 workers.deleteOldRecords = async () => {
-  const oneDayAgo = new Date().setDate(new Date().getDate() - 1)
-  const query = { createdAt: { $lt: oneDayAgo }, state: 'done' }
-
   const deleteItems = async () => {
+    const oneDayAgo = new Date().setDate(new Date().getDate() - 1)
+    const query = { createdAt: { $lt: oneDayAgo }, state: 'done' }
     const count = await Queue.countDocuments(query)
     const countOfGames = await Games.countDocuments({ last_check: { $lt: oneDayAgo } })
     await Queue.deleteMany(query)
