@@ -39,6 +39,8 @@ _discord.client.on('ready', () => {
     _discord.commands.forEach(async command => {
       await _discord.client.application.commands.create(command.data)
     })
+
+    _discord.client.user.setActivity('Steam Games', { type: 3 })
   } catch (err) {
     log(err, 'error', 'discord.log')
   }
@@ -99,6 +101,10 @@ _discord.client.on(discord.Events.InteractionCreate, async interaction => {
 
 _discord.init = async () => {
   _discord.client.login(config.discord.token)
+}
+
+_discord.setNewGamesActivity = async gamesCount => {
+  _discord.client.user.setActivity(`${gamesCount} games`, { type: 3 })
 }
 
 _discord.embedNewGame = async game => {

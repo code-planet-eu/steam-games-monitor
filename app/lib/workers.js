@@ -11,7 +11,7 @@ const workers = {}
 workers.init = async () => {
   log('Starting workers...')
   workers.deleteOldRecords()
-  workers.refreshGames(10)
+  workers.refreshGames(5)
   workers.processQueue()
 }
 
@@ -63,6 +63,7 @@ workers.deleteOldRecords = async () => {
 }
 
 sg.on('StoreSearchResults', async ({ results, count, page }) => {
+  _discord.setNewGamesActivity(count)
   log(`Got ${count} results from page ${page}`, 'info', 'workers.log')
   results.forEach(result => {
     const queue = new Queue(result)
