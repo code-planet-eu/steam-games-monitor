@@ -104,7 +104,17 @@ _discord.init = async () => {
 }
 
 _discord.setNewGamesActivity = async gamesCount => {
-  _discord.client.user.setActivity(`${gamesCount} games`, { type: 3 })
+  const date = new Date()
+  const day = date.getDate()
+  const month = date.getMonth() + 1
+  const year = date.getFullYear()
+  const hours = date.getHours()
+  const minutes = date.getMinutes()
+  const seconds = date.getSeconds()
+
+  _discord.client.user.setActivity(`${gamesCount} games - ${day}/${month}/${year} ${hours}:${minutes}:${seconds}`, {
+    type: 3
+  })
 }
 
 _discord.embedNewGame = async game => {
